@@ -138,6 +138,61 @@ Configure XQuartz to allow connections from the host:
 Install [VcXsrv Windows X Server](https://sourceforge.net/projects/vcxsrv) in the default "C:/Program Files" location.
 You might need to restart your system afterwards.
 
+##### Linux
+
+> **Note:** This is experimental and officially unsupported. Members of the community who use Linux may be able to provide unofficial support. See [Support \& community](#support--community). Be sure to thank them. They're giving up their personal time to help you.
+
+This configuration depends on what type of desktop environment you are using,
+and the X server session it uses.
+
+To know if you are using x11 or wayland, run:
+
+```shell
+echo $XDG_SESSION_TYPE
+```
+
+First, create a docker-compose file at .ddev:
+
+```shell
+touch .ddev/docker-compose.xb-cypress.yml
+```
+
+Edit the docker-compose file adding the configuration depending on your XDG session type:
+
+**If you use X11**
+
+```yaml
+services:
+  web:
+    environment:
+      - DISPLAY=:0
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+```
+
+**If you use Wayland**
+
+```yaml
+services:
+  web:
+    environment:
+      - WAYLAND_DISPLAY=$WAYLAND_DISPLAY
+      - XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR
+      - DISPLAY=$DISPLAY
+      - XAUTHORITY=/tmp/.Xauthority
+    volumes:
+      - $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY:/tmp/wayland-0
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket
+      - ${XAUTHORITY:-$HOME/.Xauthority}:/tmp/.Xauthority
+```
+
+After adding the configuration, restart DDEV:
+
+```shell
+ddev restart
+```
+
 #### Running Cypress tests
 
 Run Cypress tests interactively:
