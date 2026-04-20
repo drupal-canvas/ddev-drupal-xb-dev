@@ -9,4 +9,4 @@ cd "$DDEV_COMPOSER_ROOT/$DDEV_DOCROOT" || exit 1
 
 ../vendor/bin/phpunit \
   -c core/phpunit.xml.dist \
-  modules/contrib/canvas/$*
+  modules/contrib/canvas/"$1" "${@:2}"
