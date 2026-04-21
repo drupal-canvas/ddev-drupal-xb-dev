@@ -7,6 +7,7 @@ name: drupal-xb-dev
 project_files:
   - commands/host/xb-cypress
   - commands/host/xb-fix
+  - commands/host/xb-playwright
   - commands/host/xb-setup
   - commands/host/xb-static
   - commands/web/xb-autosave

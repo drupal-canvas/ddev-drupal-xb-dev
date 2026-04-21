@@ -1,0 +1,128 @@
+#!/bin/bash
+
+## #ddev-generated
+## Description: Run Playwright tests.
+## Usage: xb-playwright run|run-one|ui|headed|debug|report|install
+## Example: ddev xb-playwright run                                 # Run all tests headlessly.\nddev xb-playwright run-one canaryMinimal.spec.ts     # Run a single spec.\nddev xb-playwright ui                                # Launch UI mode (web based).\nddev xb-playwright headed                            # Run tests headed (requires XQuartz on macOS / VcXsrv on WSL2).\nddev xb-playwright debug                             # Run tests in debug mode.\nddev xb-playwright report                            # Serve the last HTML report.\nddev xb-playwright install                           # Install chromium (default). Pass e.g. 'firefox' to install others.\nddev xb-playwright run -- --reporter=list            # Pass arbitrary arguments.
+## Aliases: playwright,pw
+## Flags: []
+## AutocompleteTerms: ["run","run-one","ui","headed","debug","report","install"]
+## OSTypes: darwin,linux
+## ExecRaw: true
+
+CANVAS_DIR_INSIDE_CONTAINER="/var/www/html/web/modules/contrib/canvas"
+CANVAS_DIR_ON_HOST="$(dirname "$0")/../../../web/modules/contrib/canvas"
+
+# Check that Playwright is installed (npm install has run).
+if [[ ! -x "$CANVAS_DIR_ON_HOST/node_modules/.bin/playwright" ]]; then
+  echo "Playwright is not installed. Run 'ddev xb-ui-build' (or 'ddev exec -d $CANVAS_DIR_INSIDE_CONTAINER npm install') and try again."
+  exit 1
+fi
+
+# Returns 0 if Playwright reports chromium as installed in the container,
+# 1 otherwise. Uses `playwright install --list` which lists browsers that are
+# actually present on disk. Redirects stdin to /dev/null so ddev exec doesn't
+# swallow input intended for the later install-confirmation prompt.
+function browsers_installed {
+  ddev exec --dir "$CANVAS_DIR_INSIDE_CONTAINER" -- \
+    npx playwright install --list </dev/null 2>/dev/null \
+    | grep -q chromium
+}
+
+function ensure_browsers {
+  if browsers_installed; then
+    return 0
+  fi
+  echo "Playwright chromium browser is not installed in the container."
+  read -r -p "Install it now (runs 'npx playwright install chromium')? [y/N] " reply
+  if [[ "$reply" =~ ^[Yy]([Ee][Ss])?$ ]]; then
+    ddev exec --dir "$CANVAS_DIR_INSIDE_CONTAINER" "npx playwright install chromium"
+    return $?
+  fi
+  echo "Aborted."
+  return 1
+}
+
+# Bootstraps an X display on the host so chromium inside the container can
+# render (for --headed and --debug). Mirrors the xb-cypress setup.
+function ensure_x11_display {
+  # On Mac, check if XQuartz is installed and running.
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    if ! open -Ra XQuartz; then
+      echo "Cannot find XQuartz. Install it and try again."
+      echo "Hint: https://github.com/drupal-canvas/ddev-drupal-xb-dev#cypress"
+      return 1
+    fi
+
+    # Start XQuartz if it isn't running.
+    if ! pgrep -x Xquartz &>/dev/null; then
+      open -a XQuartz
+      # Give it a moment to start up.
+      sleep 2
+    fi
+  fi
+
+  # Running on WSL2
+  if [[ "$OSTYPE" == "linux"* && ! -z "$WSL_DISTRO_NAME" ]]; then
+    # This assumes installation would be on C: and no custom path.
+    if [[ -f /mnt/c/Program\ Files/VcXsrv/vcxsrv.exe ]]; then
+      # Check if it's running, as you cannot have two instances
+      X_RUNNING=$(powershell.exe -Command "Get-Process vcxsrv" -ErrorAction SilentlyContinue)
+      if [[ -z $X_RUNNING ]]; then
+        powershell.exe -Command "Start-Process -FilePath 'C:\Program Files\VcXsrv\vcxsrv.exe' -ArgumentList '-multiwindow -ac -wgl'"
+      fi
+    else
+      echo "Cannot find VcXsrv. Install it and try again."
+      echo "Hint: https://github.com/drupal-canvas/ddev-drupal-xb-dev#cypress"
+      return 1
+    fi
+  fi
+
+  # Linux? You are on your own, but might _just_ work.
+
+  # Open up the allowed X11 hosts.
+  xhost + >/dev/null
+}
+
+function xb_playwright {
+  ddev exec \
+    --dir "$CANVAS_DIR_INSIDE_CONTAINER" \
+    "npx playwright $1"
+}
+
+# Remove "--", if present, or it gets treated as the command argument.
+if [[ "$1" == "--" ]]; then
+  shift
+fi
+
+# Use the first argument as the command or default to "run".
+COMMAND="${1:-run}"
+
+# Shift to process remaining arguments.
+shift
+
+# Pre-check browsers for any subcommand that actually launches one.
+case "$COMMAND" in
+  run|run-one|ui|headed|debug)
+    ensure_browsers || exit $?
+    ;;
+esac
+
+# Bootstrap a host X display for subcommands that open a visible browser /
+# inspector window. `ui` is web-based, so it doesn't need this.
+case "$COMMAND" in
+  headed|debug)
+    ensure_x11_display || exit $?
+    ;;
+esac
+
+case "$COMMAND" in
+  run) xb_playwright "test $*" ;;
+  run-one) xb_playwright "test $*" ;;
+  ui) xb_playwright "test --ui --ui-host=0.0.0.0 --ui-port=9323 $*" ;;
+  headed) xb_playwright "test --headed $*" ;;
+  debug) xb_playwright "test --debug $*" ;;
+  report) xb_playwright "show-report --host=0.0.0.0 $*" ;;
+  install) xb_playwright "install ${*:-chromium}" ;;
+  *) echo "Invalid argument: $COMMAND" >&2; exit 1 ;;
+esac
