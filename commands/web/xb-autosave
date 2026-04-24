@@ -22,7 +22,7 @@ get_autosave_status() {
 }
 
 clear_autosave() {
-  drush sql:query "delete from key_value_expire where collection='tempstore.shared.canvas.auto_save'" > /dev/null
+  drush sql:query "delete from key_value where collection='canvas.auto_save'" > /dev/null
 }
 
 # The default action is to enable auto-save.
