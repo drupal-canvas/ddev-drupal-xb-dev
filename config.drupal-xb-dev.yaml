@@ -22,3 +22,7 @@ web_extra_exposed_ports:
     container_port: 5173
     http_port: 5173
     https_port: 5174
+  - name: playwright
+    container_port: 9323
+    http_port: 9323
+    https_port: 9324
