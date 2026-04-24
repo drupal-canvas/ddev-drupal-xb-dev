@@ -1,39 +1,21 @@
 #!/bin/bash
 
 ## #ddev-generated
-## Description: Enable, disable, or clear auto-save
-## Usage: xb-autosave [on|off|enable|disable|true|false|toggle|status|clear]
-## Example: ddev autosave         # Enable auto-save.\nddev autosave on      # Enable auto-save.\nddev autosave off     # Disable auto-save.\nddev autosave toggle  # Toggle auto-save status.\nddev autosave status  # Get auto-save status.\nddev autosave clear   # Clear all auto-saves.
+## Description: Clear auto-save
+## Usage: xb-autosave clear
+## Example: ddev autosave clear   # Clear all auto-saves.
 ## Aliases: autosave,as
 ## ExecRaw: false
 ## Flags: []
-## AutocompleteTerms: ["on","off","enable","disable","toggle","status","clear"]
-
-enable_autosave() {
-  drush state:delete canvas.disable_auto-save
-}
-
-disable_autosave() {
-  drush state:set canvas.disable_auto-save 1
-}
-
-get_autosave_status() {
-  [[ "$(drush state:get canvas.disable_auto-save)" == "1" ]] && echo "0" || echo "1"
-}
+## AutocompleteTerms: ["clear"]
 
 clear_autosave() {
   drush sql:query "delete from key_value where collection='canvas.auto_save'" > /dev/null
 }
 
-# The default action is to enable auto-save.
-[[ $# -eq 0 ]] && enable_autosave && exit
-
 # Process command arguments.
 case "$1" in
-  on|true|enable) enable_autosave ;;
-  off|false|disable) disable_autosave ;;
-  toggle) if [[ "$(get_autosave_status)" == "1" ]]; then disable_autosave; else enable_autosave; fi ;;
-  status) if [[ "$(get_autosave_status)" == "1" ]]; then echo "autosave enabled"; else echo "autosave disabled"; fi ;;
   clear) clear_autosave ;;
+  "") echo "Usage: ddev xb-autosave clear" >&2; exit 1 ;;
   *) echo "Invalid argument: $1" >&2; exit 1 ;;
 esac
