@@ -12,6 +12,7 @@ project_files:
   - commands/host/xb-static
   - commands/web/xb-autosave
   - commands/web/xb-core-set-version
+  - commands/web/xb-cspell
   - commands/web/xb-dev-extras
   - commands/web/xb-eslint
   - commands/web/xb-openapi
