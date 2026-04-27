@@ -22,3 +22,7 @@ ddev xb-stylelint
 echo
 echo Running PHPStan...
 ddev xb-phpstan
+
+echo
+echo Running CSpell...
+ddev xb-cspell

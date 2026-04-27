@@ -1,0 +1,13 @@
+#!/bin/bash
+
+## #ddev-generated
+## Description: Check for spelling errors with cspell.
+## Usage: xb-cspell
+## Example: ddev xb-cspell      # Check for spelling errors.\nddev cspell           # Same, via alias.
+## Aliases: cspell,spell
+## ExecRaw: false
+## Flags: []
+
+cd "$DDEV_COMPOSER_ROOT/$DDEV_DOCROOT/modules/contrib/canvas" || exit 1
+
+npm run lint:cspell
