@@ -123,13 +123,27 @@ brew install xquartz
 
 Configure XQuartz to allow connections from the host:
 
+```shell
+defaults write org.xquartz.X11 nolisten_tcp -bool false
+```
+
+If you haven't opened XQuartz yet, it will pick up the setting on its first launch — `xb-cypress` / `xb-playwright` will start it for you.
+
+> **Security note:** allowing network clients causes XQuartz to listen on TCP (port 6000) while running. `xb-cypress` and `xb-playwright` also run `xhost +` before launching tests, which disables X access control for the session — any local process could then connect to the X server and observe its state. Only apply this setting if that tradeoff is acceptable on your machine.
+
+<details>
+<summary>Prefer to configure this from the XQuartz UI?</summary>
+
 - Open XQuartz.
 - Open Preferences ("XQuartz" > "Settings..." from the menu or `⌘,`).
 - Go to the "Security" tab.
 - Check the "Allow connections from network clients" checkbox.
-- Log out and back in or restart your machine for the change to take effect.
 
 ![XQuartz Preferences dialog](resources/xquartz-settings.png)
+
+Then restart XQuartz (quit and reopen, or log out and back in) for the change to take effect.
+
+</details>
 
 ##### Windows
 
