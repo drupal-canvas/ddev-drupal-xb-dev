@@ -9,19 +9,13 @@
 ## Flags: []
 ## AutocompleteTerms: ["fix"]
 
-UI_DIR="$DDEV_COMPOSER_ROOT/$DDEV_DOCROOT/modules/contrib/canvas/ui"
-cd "$UI_DIR" || exit 1
+cd "$DDEV_COMPOSER_ROOT/$DDEV_DOCROOT/modules/contrib/canvas" || exit 1
 
-FIX_OPTION=""
-if [[ $1 == "fix" ]]; then
-  FIX_OPTION="--fix"
-elif [[ -n $1 ]]; then
-  echo "Invalid argument: $1"
-  exit 1
-fi
-
-npx stylelint \
-  --config "$DDEV_COMPOSER_ROOT/$DDEV_DOCROOT/core/.stylelintrc.json" \
-  --ignore-pattern "dist/**/*" \
-  "$UI_DIR/**/*.css" \
-  $FIX_OPTION
+case "$1" in
+  "fix") npm run lint:stylelint -- --fix ;;
+  "") npm run lint:stylelint ;;
+  *)
+    echo "Invalid argument: $1"
+    exit 1
+    ;;
+esac
