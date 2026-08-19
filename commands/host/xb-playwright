@@ -10,23 +10,9 @@
 ## OSTypes: darwin,linux
 ## ExecRaw: true
 
-resolve_canvas_dir() {
-  ddev exec -- php -r '
-$composer = json_decode((string) file_get_contents("composer.json"), true);
-$paths = $composer["extra"]["installer-paths"] ?? [];
-foreach ($paths as $path => $conditions) {
-  if (in_array("type:drupal-module", $conditions, true)) {
-    echo str_replace("{\$name}", "canvas", $path);
-    exit(0);
-  }
-}
-echo "modules/contrib/canvas";
-'
-}
-
-CANVAS_DIR_RELATIVE="$(resolve_canvas_dir)"
-CANVAS_DIR_INSIDE_CONTAINER="/var/www/html/$CANVAS_DIR_RELATIVE"
-CANVAS_DIR_ON_HOST="$(dirname "$0")/../../../$CANVAS_DIR_RELATIVE"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+. "$SCRIPT_DIR/.xb-command-helpers.sh"
+init_canvas_paths "$SCRIPT_DIR"
 
 # Check that Playwright is installed (npm install has run).
 if [[ ! -x "$CANVAS_DIR_ON_HOST/node_modules/.bin/playwright" ]]; then

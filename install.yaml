@@ -5,6 +5,7 @@
 name: drupal-xb-dev
 
 project_files:
+  - commands/host/.xb-command-helpers.sh
   - commands/host/xb-cypress
   - commands/host/xb-fix
   - commands/host/xb-playwright

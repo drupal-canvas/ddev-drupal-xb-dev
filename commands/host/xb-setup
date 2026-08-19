@@ -7,31 +7,14 @@
 ## Flags: [{"Name":"force","Shorthand":"f","Usage":"Completely reset an existing environment if present and start over"}]
 ## ExecRaw: true
 
-cd "$(dirname "$0")" || exit
-cd ../../../
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+. "$SCRIPT_DIR/.xb-command-helpers.sh"
+
+cd "$SCRIPT_DIR/../../../" || exit
 set -e
 
-resolve_canvas_dir() {
-  ddev exec -- php -r '
-$composer = json_decode((string) file_get_contents("composer.json"), true);
-$paths = $composer["extra"]["installer-paths"] ?? [];
-foreach ($paths as $path => $conditions) {
-  if (in_array("type:drupal-module", $conditions, true)) {
-    echo str_replace("{\$name}", "canvas", $path);
-    exit(0);
-  }
-}
-echo "modules/contrib/canvas";
-'
-}
-
-CANVAS_DIR="$(resolve_canvas_dir)"
-DOCROOT_PREFIX="${CANVAS_DIR%/modules/contrib/canvas}"
-if [ "$DOCROOT_PREFIX" = "$CANVAS_DIR" ]; then
-  DOCROOT_PREFIX=""
-fi
-SETTINGS_DDEV_PATH="${DOCROOT_PREFIX:+$DOCROOT_PREFIX/}sites/default/settings.ddev.php"
-CORE_DIR_IN_CONTAINER="/var/www/html/${DOCROOT_PREFIX:+$DOCROOT_PREFIX/}core"
+init_canvas_paths "$SCRIPT_DIR"
+CANVAS_DIR="$CANVAS_DIR_RELATIVE"
 
 # Flag-handling.
 while :; do
