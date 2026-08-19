@@ -3,8 +3,7 @@
 ## #ddev-generated
 ## Description: Find problems in JavaScript code with ESLint.
 ## Usage: xb-eslint [fix]
-## Example: ddev eslint      # Check for errors.\nddev eslint fix  # Fix errors where possible.
-## Aliases: eslint,js
+## Example: ddev xb-eslint      # Check for errors.\nddev xb-eslint fix  # Fix errors where possible.
 ## ExecRaw: false
 ## Flags: []
 ## AutocompleteTerms: ["fix"]

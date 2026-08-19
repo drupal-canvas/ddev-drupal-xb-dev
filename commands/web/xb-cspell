@@ -4,7 +4,6 @@
 ## Description: Check for spelling errors with cspell.
 ## Usage: xb-cspell [staged]
 ## Example: ddev xb-cspell         # Check for spelling errors across the module.\nddev xb-cspell staged  # Check only files staged for commit.
-## Aliases: cspell,spell
 ## ExecRaw: false
 ## Flags: []
 ## AutocompleteTerms: ["staged"]

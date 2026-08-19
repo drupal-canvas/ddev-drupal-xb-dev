@@ -3,8 +3,7 @@
 ## #ddev-generated
 ## Description: Find errors and enforce conventions with Stylelint.
 ## Usage: xb-stylelint [fix]
-## Example: ddev stylelint      # Find errors.\nddev stylelint fix  # Fix errors where possible.
-## Aliases: stylelint,css
+## Example: ddev xb-stylelint      # Find errors.\nddev xb-stylelint fix  # Fix errors where possible.
 ## ExecRaw: false
 ## Flags: []
 ## AutocompleteTerms: ["fix"]

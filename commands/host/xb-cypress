@@ -4,7 +4,6 @@
 ## Description: Run Cypress tests.
 ## Usage: xb-cypress open|run|component
 ## Example: ddev xb-cypress open                       # Run end-to-end tests in interactive mode.\nddev xb-cypress run                        # Run all tests headlessly.\nddev xb-cypress component                  # Run component/unit tests.\nddev xb-cypress open -- --env "VAR=value"  # Pass arbitrary command arguments.
-## Aliases: cypress,cy
 ## Flags: []
 ## AutocompleteTerms: ["component","open","run"]
 ## OSTypes: darwin,linux

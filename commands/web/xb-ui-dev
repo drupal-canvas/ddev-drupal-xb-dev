@@ -3,7 +3,6 @@
 ## #ddev-generated
 ## Description: Install dependencies and run Drupal Canvas' UI app development server.
 ## Example: ddev xb-ui-dev
-## Aliases: ui-dev,dev
 
 cd "$DDEV_COMPOSER_ROOT/$DDEV_DOCROOT/modules/contrib/canvas" || exit 1
 

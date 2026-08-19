@@ -3,8 +3,7 @@
 ## #ddev-generated
 ## Description: Clear auto-save
 ## Usage: xb-autosave clear
-## Example: ddev autosave clear   # Clear all auto-saves.
-## Aliases: autosave,as
+## Example: ddev xb-autosave clear   # Clear all auto-saves.
 ## ExecRaw: false
 ## Flags: []
 ## AutocompleteTerms: ["clear"]

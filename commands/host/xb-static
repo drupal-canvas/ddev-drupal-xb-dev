@@ -3,8 +3,7 @@
 ## #ddev-generated
 ## Description: Run all static analysis tools.
 ## Usage: xb-static
-## Example: ddev static
-## Aliases: static
+## Example: ddev xb-static
 ## Flags: []
 ## ExecRaw: true
 

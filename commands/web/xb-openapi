@@ -3,8 +3,7 @@
 ## #ddev-generated
 ## Description: Find problems in OpenApi with redocly.
 ## Usage: xb-openapi
-## Example: ddev xb-openapi      # Check for errors.\nddev openapi
-## Aliases: openapi
+## Example: ddev xb-openapi      # Check for errors.
 ## ExecRaw: false
 ## Flags: []
 ## AutocompleteTerms: []

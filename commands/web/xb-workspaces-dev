@@ -4,7 +4,6 @@
 ## Description: Configure the environment for Workspaces development.
 ## Usage: xb-workspaces-dev
 ## Example: ddev xb-workspaces-dev\nddev xb-workspaces-dev --dry-run
-## Aliases: workspaces,wse
 ## Flags: [{"Name":"dry-run","Usage":"Show what the command will do if run"}]
 
 #  If the '--dry-run' flag is passed, show what the command would do and then exit.
