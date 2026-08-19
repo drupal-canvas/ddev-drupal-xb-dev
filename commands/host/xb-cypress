@@ -12,8 +12,24 @@
 
 cd "$(dirname "$0")" || exit 1
 
-CYPRESS_BIN="$(dirname "$0")/../../../web/modules/contrib/canvas/node_modules/cypress/bin/cypress"
-CYPRESS_BIN_INSIDE_CONTAINER="/var/www/html/web/modules/contrib/canvas/node_modules/cypress/bin/cypress"
+resolve_canvas_dir() {
+  ddev exec -- php -r '
+$composer = json_decode((string) file_get_contents("composer.json"), true);
+$paths = $composer["extra"]["installer-paths"] ?? [];
+foreach ($paths as $path => $conditions) {
+  if (in_array("type:drupal-module", $conditions, true)) {
+    echo str_replace("{\$name}", "canvas", $path);
+    exit(0);
+  }
+}
+echo "modules/contrib/canvas";
+'
+}
+
+CANVAS_DIR="$(resolve_canvas_dir)"
+CYPRESS_BIN="$(dirname "$0")/../../../$CANVAS_DIR/node_modules/cypress/bin/cypress"
+CYPRESS_BIN_INSIDE_CONTAINER="/var/www/html/$CANVAS_DIR/node_modules/cypress/bin/cypress"
+CANVAS_UI_DIR_INSIDE_CONTAINER="/var/www/html/$CANVAS_DIR/ui"
 
 # Check for the presence of Cypress.
 if ! command -v "$CYPRESS_BIN" &>/dev/null; then
@@ -62,7 +78,7 @@ xhost +
 function xb_cypress {
   # This needs to be the binary path inside the container.
   ddev exec \
-    --dir /var/www/html/web/modules/contrib/canvas/ui \
+    --dir "$CANVAS_UI_DIR_INSIDE_CONTAINER" \
     "$CYPRESS_BIN_INSIDE_CONTAINER $1"
 }
 
