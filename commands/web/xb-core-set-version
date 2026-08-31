@@ -3,8 +3,7 @@
 ## #ddev-generated
 ## Description: Change the version of Drupal core.
 ## Usage: xb-core-set-version <core-version>
-## Example: ddev core ^11           # Use the latest 11.x.\nddev core 11.0.7        # Use a specific version.\nddev core "^10 || ^11"  # Use the latest 10.x or 11.x.
-## Aliases: core
+## Example: ddev xb-core-set-version ^11           # Use the latest 11.x.\nddev xb-core-set-version 11.0.7        # Use a specific version.\nddev xb-core-set-version "^10 || ^11"  # Use the latest 10.x or 11.x.
 ## Flags: []
 ## ExecRaw: true
 

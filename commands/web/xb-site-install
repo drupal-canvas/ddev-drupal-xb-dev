@@ -3,7 +3,6 @@
 ## #ddev-generated
 ## Description: (Re)install Drupal and the Drupal Canvas module.
 ## Example: ddev xb-site-install
-## Aliases: site-install,si
 
 # Install Drupal.
 drush site:install -y \

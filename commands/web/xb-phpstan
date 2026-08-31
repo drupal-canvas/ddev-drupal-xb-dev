@@ -3,7 +3,6 @@
 ## #ddev-generated
 ## Description: Analyze code to find bugs with PHPStan.
 ## Example: ddev xb-phpstan
-## Aliases: phpstan,stan
 
 cd "$DDEV_COMPOSER_ROOT/$DDEV_DOCROOT" || exit 1
 

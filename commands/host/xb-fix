@@ -3,8 +3,7 @@
 ## #ddev-generated
 ## Description: Run all static analysis automatic fixer tools.
 ## Usage: xb-fix
-## Example: ddev fix
-## Aliases: fix
+## Example: ddev xb-fix
 ## Flags: []
 ## ExecRaw: true
 

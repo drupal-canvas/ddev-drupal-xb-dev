@@ -3,7 +3,6 @@
 ## #ddev-generated
 ## Description: Run PHPUnit tests.
 ## Example: ddev xb-phpunit                          Run all tests.\nddev xb-phpunit tests/src/Unit/Example   Specify a path to a specific test file or directory relative to the module root.
-## Aliases: phpunit,test
 
 cd "$DDEV_COMPOSER_ROOT/$DDEV_DOCROOT" || exit 1
 

@@ -4,7 +4,6 @@
 ## Description: Add some convenience extras for development.
 ## Usage: xb-dev-extras
 ## Example: ddev xb-dev-extras\nddev xb-dev-extras --dry-run
-## Aliases: extras
 ## Flags: [{"Name":"dry-run","Usage":"Show what the command will do if run"}]
 
 #  If the '--dry-run' flag is passed, show what the command would do and then exit.

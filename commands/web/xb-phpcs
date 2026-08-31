@@ -3,8 +3,7 @@
 ## #ddev-generated
 ## Description: Check for standards compliance with PHPCS.
 ## Usage: xb-phpcs [fix]
-## Example: ddev phpcs      # Check for errors.\nddev phpcs fix  # Fix errors where possible.
-## Aliases: phpcs,cs
+## Example: ddev xb-phpcs      # Check for errors.\nddev xb-phpcs fix  # Fix errors where possible.
 ## ExecRaw: false
 ## Flags: []
 ## AutocompleteTerms: ["fix"]

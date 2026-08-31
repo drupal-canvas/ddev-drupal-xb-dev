@@ -4,7 +4,6 @@
 ## Description: Run Playwright tests.
 ## Usage: xb-playwright run|run-one|ui|headed|debug|report|install
 ## Example: ddev xb-playwright run                                 # Run all tests headlessly.\nddev xb-playwright run-one canaryMinimal.spec.ts     # Run a single spec.\nddev xb-playwright ui                                # Launch UI mode (web based).\nddev xb-playwright headed                            # Run tests headed (requires XQuartz on macOS / VcXsrv on WSL2).\nddev xb-playwright debug                             # Run tests in debug mode.\nddev xb-playwright report                            # Serve the last HTML report.\nddev xb-playwright install                           # Install chromium (default). Pass e.g. 'firefox' to install others.\nddev xb-playwright run -- --reporter=list            # Pass arbitrary arguments.
-## Aliases: playwright,pw
 ## Flags: []
 ## AutocompleteTerms: ["run","run-one","ui","headed","debug","report","install"]
 ## OSTypes: darwin,linux
