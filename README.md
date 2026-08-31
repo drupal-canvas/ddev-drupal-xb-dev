@@ -212,19 +212,19 @@ ddev restart
 Run Cypress tests interactively:
 
 ```shell
-ddev cypress open
+ddev xb-cypress open
 ```
 
 Run them headlessly:
 
 ```shell
-ddev cypress run
+ddev xb-cypress run
 ```
 
 Run component/unit tests:
 
 ```shell
-ddev cypress component
+ddev xb-cypress component
 ```
 
 ## Support & community
