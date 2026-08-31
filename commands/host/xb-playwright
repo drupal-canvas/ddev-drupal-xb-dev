@@ -9,8 +9,9 @@
 ## OSTypes: darwin,linux
 ## ExecRaw: true
 
-CANVAS_DIR_INSIDE_CONTAINER="/var/www/html/web/modules/contrib/canvas"
-CANVAS_DIR_ON_HOST="$(dirname "$0")/../../../web/modules/contrib/canvas"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+. "$SCRIPT_DIR/.xb-command-helpers.sh"
+init_canvas_paths "$SCRIPT_DIR"
 
 # Check that Playwright is installed (npm install has run).
 if [[ ! -x "$CANVAS_DIR_ON_HOST/node_modules/.bin/playwright" ]]; then

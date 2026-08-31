@@ -9,10 +9,12 @@
 ## OSTypes: darwin,linux
 ## ExecRaw: true
 
-cd "$(dirname "$0")" || exit 1
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+. "$SCRIPT_DIR/.xb-command-helpers.sh"
+init_canvas_paths "$SCRIPT_DIR"
 
-CYPRESS_BIN="$(dirname "$0")/../../../web/modules/contrib/canvas/node_modules/cypress/bin/cypress"
-CYPRESS_BIN_INSIDE_CONTAINER="/var/www/html/web/modules/contrib/canvas/node_modules/cypress/bin/cypress"
+CYPRESS_BIN="$CANVAS_DIR_ON_HOST/node_modules/cypress/bin/cypress"
+CYPRESS_BIN_INSIDE_CONTAINER="$CANVAS_DIR_INSIDE_CONTAINER/node_modules/cypress/bin/cypress"
 
 # Check for the presence of Cypress.
 if ! command -v "$CYPRESS_BIN" &>/dev/null; then
@@ -61,7 +63,7 @@ xhost +
 function xb_cypress {
   # This needs to be the binary path inside the container.
   ddev exec \
-    --dir /var/www/html/web/modules/contrib/canvas/ui \
+    --dir "$CANVAS_UI_DIR_INSIDE_CONTAINER" \
     "$CYPRESS_BIN_INSIDE_CONTAINER $1"
 }
 

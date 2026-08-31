@@ -7,9 +7,14 @@
 ## Flags: [{"Name":"force","Shorthand":"f","Usage":"Completely reset an existing environment if present and start over"}]
 ## ExecRaw: true
 
-cd "$(dirname "$0")" || exit
-cd ../../../
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+. "$SCRIPT_DIR/.xb-command-helpers.sh"
+
+cd "$SCRIPT_DIR/../../../" || exit
 set -e
+
+init_canvas_paths "$SCRIPT_DIR"
+CANVAS_DIR="$CANVAS_DIR_RELATIVE"
 
 # Flag-handling.
 while :; do
@@ -28,7 +33,7 @@ while :; do
 done
 
 # Exit early if the environment is already set up.
-if [ -d web/modules/contrib/canvas/.git ] && [ ! "$FORCE" ]; then
+if [ -d "$CANVAS_DIR/.git" ] && [ ! "$FORCE" ]; then
   GREEN="\033[0;32m"
   NO_COLOR="\033[0m"
   printf "%bThe Drupal Canvas development environment is already set up.%b\n" "$GREEN" "$NO_COLOR"
@@ -40,14 +45,14 @@ if [ -d web/modules/contrib/canvas/.git ] && [ ! "$FORCE" ]; then
 fi
 
 # Remove the Drupal Canvas module if it's there.
-rm -rf web/modules/contrib/canvas
-mkdir -p web/modules/contrib
+rm -rf "$CANVAS_DIR"
+mkdir -p "$(dirname "$CANVAS_DIR")"
 
 # Place the Drupal Canvas module via Git for development. Require
 # it with Composer to test its composer.json and place dependencies.
 git clone \
   git@git.drupal.org:project/canvas.git \
-  web/modules/contrib/canvas
+  "$CANVAS_DIR"
 
 # Allow all Composer plugins.
 ddev composer config \
@@ -66,7 +71,7 @@ ddev composer require \
 ddev composer config \
   repositories.xb \
   path \
-  web/modules/contrib/canvas
+  "$CANVAS_DIR"
 ddev composer require \
   --no-install \
   --update-with-all-dependencies \
@@ -87,13 +92,13 @@ ddev composer require \
 # Allow test modules and themes to be installed.
 # shellcheck disable=SC2016
 printf '\n# Allow test modules and themes to be installed.\n$settings["extension_discovery_scan_tests"] = TRUE;' \
-  >> web/sites/default/settings.ddev.php
+  >> "$SETTINGS_DDEV_PATH"
 
 # Install Drupal and enable the Drupal Canvas module.
 ddev xb-site-install
 
 # Install Drupal core NPM packages.
-ddev exec --dir /var/www/html/web/core -- npm install
+ddev exec --dir "$CORE_DIR_IN_CONTAINER" -- npm install
 
 # Build front-end assets.
 ddev xb-ui-build
