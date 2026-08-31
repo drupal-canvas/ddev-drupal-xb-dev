@@ -1,5 +1,7 @@
 #!/bin/bash
 
+## #ddev-generated
+
 # Shared helpers for host-side xb commands.
 
 resolve_canvas_dir() {
